@@ -21,31 +21,26 @@ public class TP_ObjectBehaviour : MonoBehaviour {
 	
 	void Update () {
 
-        //if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity, objectMask))
-        //{
-        //    Debug.Log("CLICKABLE! : " + hitInfo.transform.name);
-        //}
-
         if (Input.GetMouseButtonDown(0))
         {
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity, objectMask) && hitInfo.transform.tag == "Clickable")
             {
                 Debug.Log("CLICKABLE! : " + hitInfo.transform.name);
-                if (hitInfo.transform.name == "ObjKey")
+                if (hitInfo.transform.name == "Llave")
                 {
                     hasKey = true;
                     objKey.SetActive(false);
                 }
-                if (hitInfo.transform.name == "ObjHammer")
+                if (hitInfo.transform.name == "Hammer")
                 {
                     hasHammer = true;
                     hammer.SetActive(false);
                 }
-                if (hitInfo.transform.name == "ObjClock" && hasHammer)
+                if (hitInfo.transform.name == "Espejo" && hasHammer)
                 {
                     objKey.SetActive(true);
                 }
-                if (hitInfo.transform.name == "Door" && hasKey)
+                if (hitInfo.transform.name == "Puertas" && hasKey)
                 {
                     Debug.Log("CONDITIONS MET");
                     hasKey = false;

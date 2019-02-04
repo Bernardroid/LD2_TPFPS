@@ -2,25 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class FPS_Timer : MonoBehaviour {
 
 
     public double startTime;
-    double timeLeft;
+    public static double timeLeft;
     public bool timeRunning;
     public bool gameOver;
 
     public Text timeText;
+    public Text messageText;
+    public SCR_SimpleMove charMoveScript;
+    public GameObject btnRestart;
 
     private void Start()
     {
         gameOver = false;
-        startTime = 10.00;
         timeLeft = startTime;
         timeRunning = false;
-        timeText.text = startTime.ToString();
+        timeText.text = startTime.ToString("F2");
         StartCoroutine(StartTimer());
+        btnRestart.SetActive(false);
+        Time.timeScale = 1;
+        //charMoveScript.enabled = true;
     }
 
     void Update () {
@@ -29,33 +35,53 @@ public class FPS_Timer : MonoBehaviour {
         {
             timeLeft -= Time.deltaTime;
 
-            if (timeLeft < 0)
+            if (timeLeft < 0 && !gameOver)
             {
                 gameOver = true;
                 timeLeft = 0;
+                StartCoroutine(ActivateGameOver());
             }
 
             timeText.text = timeLeft.ToString("F2");
         }
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Return))
         {
             timeRunning = !timeRunning;
         }
 	}
 
+    public void OnRestartClicked()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    IEnumerator ActivateGameOver()
+    {
+        Time.timeScale = 0.5f;
+        yield return new WaitForSecondsRealtime(2);
+        Time.timeScale = 0;
+        btnRestart.SetActive(true);
+        charMoveScript.enabled = false;
+    }
+
     IEnumerator StartTimer()
     {
-        Debug.Log("CINCO!");
+        charMoveScript.enabled = false;
         yield return new WaitForSecondsRealtime(1);
-        Debug.Log("CUATRO!");
+        messageText.text = "5";
         yield return new WaitForSecondsRealtime(1);
-        Debug.Log("TRES!");
+        messageText.text = "4";
         yield return new WaitForSecondsRealtime(1);
-        Debug.Log("DOS!");
+        messageText.text = "3";
         yield return new WaitForSecondsRealtime(1);
-        Debug.Log("UNO!");
+        messageText.text = "2";
         yield return new WaitForSecondsRealtime(1);
-        Debug.Log("EMPIEZA");
+        messageText.text = "1";
+        yield return new WaitForSecondsRealtime(1);
+        messageText.text = "START!";
+        charMoveScript.enabled = true;
+        yield return new WaitForSecondsRealtime(1);
+        messageText.text = "";
         timeRunning = true;
     }
 }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Climbable
   - Clickable
+  - Death
   layers:
   - Default
   - TransparentFX

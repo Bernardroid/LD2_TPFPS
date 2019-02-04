@@ -10,9 +10,11 @@ public class SCR_SimpleMove : MonoBehaviour
     public float lookSensibility = 2.0f;
     float yaw = 0.0f;
     float pitch = 0.0f;
+    float playerSpeed = 5.0f;
 
     Rigidbody rb;
     public Transform cameraChild;
+    public Transform respawnPoint;
 
     private void Start()
     {
@@ -21,8 +23,17 @@ public class SCR_SimpleMove : MonoBehaviour
 
     void Update()
     {
-        float x = Input.GetAxis("Horizontal") * Time.deltaTime * 5.0f;
-        float z = Input.GetAxis("Vertical") * Time.deltaTime * 5.0f;
+        if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        {
+            playerSpeed = 7.5f;
+        }
+        if(Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.RightShift))
+        {
+            playerSpeed = 5.0f;
+        }
+
+        float x = Input.GetAxis("Horizontal") * Time.deltaTime * playerSpeed;
+        float z = Input.GetAxis("Vertical") * Time.deltaTime * playerSpeed;
 
         yaw += lookSensibility * Input.GetAxis("Mouse X");
         pitch += lookSensibility * Input.GetAxis("Mouse Y");
@@ -49,6 +60,11 @@ public class SCR_SimpleMove : MonoBehaviour
             Debug.Log("AM IN HERE");
             canClimb = true;
             rb.useGravity = false;
+            rb.velocity = Vector3.zero;
+        }
+        if(other.CompareTag("Death"))
+        {
+            transform.position = respawnPoint.position;
         }
     }
 
